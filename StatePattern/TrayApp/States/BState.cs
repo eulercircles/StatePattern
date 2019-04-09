@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace TrayApp.States
 {
-	internal abstract class State
+	internal abstract class BState
 	{
 		private readonly BackgroundWorker _backgroundWorker;
 		private readonly StateArgs _stateArgs;
@@ -25,7 +25,7 @@ namespace TrayApp.States
 		protected bool CancellationPending => _backgroundWorker.CancellationPending;
 		protected StateCancellationResons CancellationReason { get; private set; }
 
-		internal State(StateArgs stateArgs)
+		internal BState(StateArgs stateArgs)
 		{
 			_stateArgs = stateArgs ?? throw new ArgumentNullException(nameof(stateArgs));
 
@@ -47,9 +47,9 @@ namespace TrayApp.States
 			_backgroundWorker.CancelAsync();
 		}
 
-		protected abstract State DoWork(StateArgs stateArgs);
+		protected abstract BState DoWork(StateArgs stateArgs);
 
-		protected void TransitionState(bool cancelled, Exception error, State nextState)
+		protected void TransitionState(bool cancelled, Exception error, BState nextState)
 			=> _transitioning?.Invoke(this, new StateTransitionEventArgs(cancelled, error, nextState));
 
 		private void _backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
@@ -62,6 +62,6 @@ namespace TrayApp.States
 			throw new NotImplementedException();
 		}
 		
-		private void Completed(bool cancelled, Exception error, State result) => TransitionState(cancelled, error, result);
+		private void Completed(bool cancelled, Exception error, BState result) => TransitionState(cancelled, error, result);
 	}
 }

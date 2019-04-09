@@ -6,9 +6,9 @@ namespace TrayApp.States
 	{
 		internal bool Cancelled { get; }
 		internal Exception Error { get; }
-		internal State NextState { get; }
+		internal BState NextState { get; }
 
-		internal StateTransitionEventArgs(bool cancelled, Exception error, State nextState)
+		internal StateTransitionEventArgs(bool cancelled, Exception error, BState nextState)
 		{
 			Cancelled = cancelled;
 			Error = error;
